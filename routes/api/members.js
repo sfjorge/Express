@@ -4,10 +4,10 @@ const members = require('../../members.js');
 const uuid = require('uuid');
 
 // this route gets all members
-router.get('/api/members', (req,res) => res.json(members));
+router.get('/', (req,res) => res.json(members));
 
-//get single member
-router.get('/api/members/:id', (req, res) => {
+//GET single member
+router.get('/:id', (req, res) => {
     const found = members.some(member => member.id === parseInt(req.params.id));
 
     // res.send(req.params.id);
@@ -21,7 +21,7 @@ router.get('/api/members/:id', (req, res) => {
     
 });
 
-// create a member
+// CREATE a member
 router.post('/', (req, res) => {
     // res.send(req.body);   -->   returns/responds data that was given/requested
     const newMember = {
@@ -36,10 +36,11 @@ router.post('/', (req, res) => {
     }
 
     members.push(newMember);
-    res.json(members); // returns entire new array of members
+    // res.json(members); // returns entire new array of members
+    res.redirect('/');
 });
 
-// update member
+// UPDATE member
 router.put('/:id', (req, res) => {
     const found = members.some(member => member.id === parseInt(req.params.id));
 
@@ -59,14 +60,14 @@ router.put('/:id', (req, res) => {
     }
 });
 
-// delete member
-router.delete(':id', (req, res) => {
+// DELETE member
+router.delete('/:id', (req, res) => {
     const found = members.some(member => member.id === parseInt(req.params.id));
 
     if (found) {
         res.json({
             msg: 'Member deleted', 
-            members: members.filter(member => member.id === parseInt(req.params.id))
+            members: members.filter(member => member.id !== parseInt(req.params.id))
     });
     }
     else {
